@@ -1,0 +1,10 @@
+[package]
+name = "Searcher"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+eframe = "0.22.0"
+walkdir = "2.4"
+egui = "0.22.0"
+dirs = "4.0"
