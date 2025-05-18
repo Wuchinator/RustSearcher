@@ -1,4 +1,3 @@
-# Основные команды
 .PHONY: all build release run clean install uninstall
 
 all: build
