@@ -31,5 +31,5 @@ RustSearcher/
 ### From source
 ```bash
 git clone https://github.com/Wuchinator/RustSearcher.git
-cd Searcher
+cd RustSearcher/RusrSearcher
 cargo build --release
