@@ -32,4 +32,7 @@ RustSearcher/
 ```bash
 git clone https://github.com/Wuchinator/RustSearcher.git
 cd RustSearcher/RusrSearcher
-cargo build --release
+make run
+```
+
+
