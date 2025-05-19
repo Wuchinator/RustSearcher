@@ -1,5 +1,7 @@
 use super::model::FileSearchApp;
 use eframe::egui;
+use rayon::prelude::*;
+
 
 pub fn show_top_panel(app: &mut FileSearchApp, ctx: &egui::Context) {
     egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
@@ -87,26 +89,28 @@ pub fn show_main_content(app: &mut FileSearchApp, ctx: &egui::Context) {
         }
 
         let search_changed = ui.text_edit_singleline(&mut app.search_term).changed();
-        
+
         if search_changed && !app.search_term.is_empty() {
             let search_term = app.search_term.to_lowercase();
             let indexed_files = app.indexed_files.clone();
             let results = app.results.clone();
-            
+
             std::thread::spawn(move || {
-                let found: Vec<_> = indexed_files.lock()
+                // Вариант с collect + take для корректной работы rayon
+                let found_all: Vec<_> = indexed_files.lock()
                     .unwrap()
-                    .iter()
+                    .par_iter()
                     .filter(|path| {
                         path.file_name()
                             .and_then(|n| n.to_str())
                             .map(|n| n.to_lowercase().contains(&search_term))
                             .unwrap_or(false)
                     })
-                    .take(1000)
                     .cloned()
                     .collect();
-                
+
+                let found: Vec<_> = found_all.into_iter().take(1000).collect();
+
                 *results.lock().unwrap() = found;
             });
         }
