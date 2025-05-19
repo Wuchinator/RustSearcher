@@ -1,21 +1,56 @@
-.PHONY: all build release run clean install uninstall
+
+CARGO = cargo
+
+
+RELEASE_FLAGS = --release
+
+
+LINUX_TARGET = x86_64-unknown-linux-gnu
+WINDOWS_TARGET = x86_64-pc-windows-gnu
+MACOS_TARGET = x86_64-apple-darwin
+
+
+WAYLAND_DISABLE = env WAYLAND_DISPLAY=
+
+.PHONY: all build debug release run clean install uninstall \
+        build-linux build-windows build-macos
 
 all: build
 
-build:
-	@cargo build
 
-release:
-	@cargo build --release
+build:
+	@$(CARGO) build
+
 
 run:
-	@cargo run
+	@$(WAYLAND_DISABLE) $(CARGO) run
+
+release:
+	@$(CARGO) build $(RELEASE_FLAGS)
+
+
+run-release: release
+	@$(WAYLAND_DISABLE) $(CARGO) run $(RELEASE_FLAGS)
+
 
 clean:
-	@cargo clean
+	@$(CARGO) clean
+
+install: release
+	@echo "Installing to /usr/local/bin"
+	@install -Dm755 target/release/rust-searcher /usr/local/bin/rust-searcher
+
+uninstall:
+	@rm -f /usr/local/bin/rust-searcher
 
 build-linux:
-	@cargo build --release --target=x86_64-unknown-linux-gnu
+	@$(CARGO) build $(RELEASE_FLAGS) --target=$(LINUX_TARGET)
 
 build-windows:
-	@cargo build --release --target=x86_64-pc-windows-gnu
+	@$(CARGO) build $(RELEASE_FLAGS) --target=$(WINDOWS_TARGET)
+
+build-macos:
+	@$(CARGO) build $(RELEASE_FLAGS) --target=$(MACOS_TARGET)
+
+
+build-all: build-linux build-windows build-macos
