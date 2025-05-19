@@ -25,7 +25,7 @@ RustSearcher/
 ```
 
 
-##Requires
+## Requires
 - Rust 1.82+
 
 ### From source
