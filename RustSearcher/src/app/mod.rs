@@ -3,10 +3,12 @@ pub mod model;
 pub mod ui;
 
 pub use model::FileSearchApp;
-pub use ui::{show_top_panel, show_exclude_window, show_main_content};
+pub use ui::{show_top_panel, show_exclude_window, show_main_content, update_theme};
 
 impl eframe::App for FileSearchApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        update_theme(ctx, self.theme.dark_mode);
+        
         if let Ok(files) = self.indexed_files.lock() {
             self.indexed_count = files.len();
             if self.is_indexing && !files.is_empty() {

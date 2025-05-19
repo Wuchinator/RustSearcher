@@ -4,6 +4,11 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 use walkdir::WalkDir;
 
+#[derive(Clone)]
+pub struct Theme {
+    pub dark_mode: bool,
+}
+
 pub struct FileSearchApp {
     pub search_term: String,
     pub results: Arc<Mutex<Vec<PathBuf>>>,
@@ -13,7 +18,9 @@ pub struct FileSearchApp {
     pub show_exclude_window: bool,
     pub excluded_paths: Vec<String>,
     pub new_exclude_path: String,
+    pub theme: Theme,
 }
+
 
 impl FileSearchApp {
     pub fn start_indexing(&mut self) {
@@ -86,6 +93,7 @@ impl Default for FileSearchApp {
                 "/var".to_string(),
             ],
             new_exclude_path: String::new(),
+            theme: Theme { dark_mode: true },
         };
         
         app.load_config();

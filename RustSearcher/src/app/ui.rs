@@ -7,12 +7,36 @@ pub fn show_top_panel(app: &mut FileSearchApp, ctx: &egui::Context) {
             if ui.button("Управление исключениями").clicked() {
                 app.show_exclude_window = true;
             }
+            
+            if ui.button(if app.theme.dark_mode { "🌞 Светлая тема" } else { "🌚 Тёмная тема" }).clicked() {
+                app.theme.dark_mode = !app.theme.dark_mode;
+                update_theme(ctx, app.theme.dark_mode);
+            }
+            
             ui.label(format!("Проиндексировано файлов: {}", app.indexed_count));
         });
     });
 }
 
-pub fn show_exclude_window(app: &mut FileSearchApp, ctx: &egui::Context) -> bool {
+
+pub fn update_theme(ctx: &egui::Context, dark_mode: bool) {
+    let mut visuals = if dark_mode {
+        egui::Visuals::dark()
+    } else {
+        egui::Visuals::light()
+    };
+    
+    visuals.widgets.noninteractive.bg_fill = if dark_mode {
+        egui::Color32::from_gray(25)
+    } else {
+        egui::Color32::from_gray(240)
+    };
+    
+    ctx.set_visuals(visuals);
+}
+
+pub fn show_exclude_window(app: 
+    &mut FileSearchApp, ctx: &egui::Context) -> bool {
     let mut should_reindex = false;
     let mut to_remove = None;
     let new_exclude_path = app.new_exclude_path.clone();
