@@ -7,7 +7,6 @@ A fast and lightweight file search application written in Rust. You can easily e
 - Real-time search
 - Clean GUI interface
 
-## Installation
 
 ##  Структура проекта
 
@@ -28,10 +27,13 @@ RustSearcher/
 ## Requires
 - Rust 1.82+
 
+
+## Installation
 ### From source
 ```bash
 git clone https://github.com/Wuchinator/RustSearcher.git
 cd RustSearcher/RusrSearcher
+make build
 make run
 ```
 
